@@ -1,10 +1,5 @@
 # MWECAU DigiVote — Architecture Documentation
 
-> **Suggested GitHub repo description (copy to repo settings):**  
-> Public architecture documentation for MWECAU DigiVote — secure student election platform at Mwenge Catholic University.
-
-**Repository Bio**
-
 MWECAU DigiVote is the official electronic voting platform for Mwenge Catholic University (MWECAU) student elections. This repository provides the **public architecture documentation** for the system.
 
 It is designed as a clean, standalone resource for the MWECAU IT Department, university staff, student contributors, and other institutions interested in digital election systems. The documentation covers high-level design, key processes, technology choices, and visual diagrams — without exposing application source code or operational secrets.
