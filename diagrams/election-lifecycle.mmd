@@ -1,0 +1,30 @@
+stateDiagram-v2
+    [*] --> Draft: Commissioner creates election
+    Draft --> Configured: Add levels + positions + candidates
+
+    Configured --> Scheduled: Set start/end dates
+
+    Scheduled --> Active: Activate (tokens become issuable)
+    Active --> VotingOpen: Voting window begins
+
+    VotingOpen --> Closed: Reaches end_date or manual close
+    Active --> Closed: Force closed by commissioner
+
+    Closed --> ResultsReady: Results computed internally
+
+    ResultsReady --> Published: results_published = true
+    Published --> Archived: PDF report generated & stored
+
+    Archived --> [*]
+
+    note right of Active
+        - Voters can cast votes using tokens
+        - Results remain sealed for everyone
+        - Monitors see only turnout
+    end note
+
+    note right of Published
+        - Full vote counts visible to all
+        - Downloadable PDF report
+        - Cannot be unpublished
+    end note
