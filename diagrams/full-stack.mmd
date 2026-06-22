@@ -1,0 +1,47 @@
+flowchart TB
+    subgraph Client["Client Layer"]
+        Browser[Browser]
+        Mobile[Mobile / Future API clients]
+    end
+
+    subgraph Delivery["Delivery & Edge"]
+        Cloudflare[Cloudflare]
+        Nginx[nginx + WhiteNoise]
+    end
+
+    subgraph Application["Application Layer"]
+        Gunicorn[Gunicorn]
+        Django[Django + DRF + HTMX]
+    end
+
+    subgraph Data["Data & State Layer"]
+        MySQL[(MySQL)]
+        Redis[(Redis)]
+    end
+
+    subgraph Async["Async & Background"]
+        Celery[Celery + Beat]
+        Workers[Celery Workers]
+    end
+
+    subgraph External["External Services"]
+        Cloudinary[Cloudinary]
+        Brevo[Brevo]
+    end
+
+    Browser --> Cloudflare
+    Mobile --> Cloudflare
+    Cloudflare --> Nginx
+    Nginx --> Gunicorn
+    Gunicorn --> Django
+
+    Django --> MySQL
+    Django --> Redis
+    Celery --> Redis
+    Workers --> MySQL
+    Workers --> Redis
+    Workers --> Brevo
+    Django --> Cloudinary
+
+    classDef layer fill:#f1f5f9,stroke:#334155
+    class Client,Delivery,Application,Data,Async,External layer
