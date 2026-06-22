@@ -1,0 +1,13 @@
+flowchart LR
+    subgraph Roles
+        direction TB
+        V["🗳️ Voter / Candidate<br/>Vote + view published results"]
+        CL["📋 Class Leader<br/>Upload college data (Excel/CSV)"]
+        C["⚖️ Commissioner<br/>Full control: users, elections,<br/>verification, publish results"]
+        O["👁️ Observer<br/>Read-only monitoring + analytics"]
+    end
+
+    style V fill:#dbeafe,stroke:#1e40af
+    style CL fill:#fef3c7,stroke:#854d0e
+    style C fill:#fee2e2,stroke:#991b1b
+    style O fill:#f3e8ff,stroke:#6b21a8
