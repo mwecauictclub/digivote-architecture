@@ -1,0 +1,51 @@
+flowchart TB
+    subgraph Users["Users & Admins"]
+        Browser[Browser / Mobile]
+    end
+
+    subgraph Cloudflare["Cloudflare"]
+        CF[Proxy + TLS +<br/>DDoS Protection]
+    end
+
+    subgraph VPS["VPS (159.65.119.182)"]
+        direction TB
+        Nginx["nginx<br/>• :443 (Cloudflare)<br/>• :81 (direct IP)<br/>• Static files"]
+        Gunicorn["Gunicorn<br/>3 workers<br/>unix:/src/gunicorn.sock"]
+        App["Django Application<br/>(/var/www/.../src)"]
+        MySQL[(MySQL<br/>digivote_db)]
+        Redis[(Redis)]
+        CeleryW[Celery Worker]
+        CeleryB[Celery Beat]
+    end
+
+    subgraph External["External"]
+        Cloudinary[(Cloudinary<br/>Media Storage)]
+        Email[Email Backend<br/>(Brevo / SMTP / AWS SES)]
+        GitHub[GitHub]
+    end
+
+    subgraph CI["CI/CD"]
+        direction TB
+        GHAction[GitHub Actions<br/>deploy.yml]
+    end
+
+    Browser --> CF
+    CF -->|https| Nginx
+    Nginx --> Gunicorn
+    Gunicorn --> App
+
+    App --> PG
+    App --> Redis
+    CeleryW --> Redis
+    CeleryW --> PG
+    CeleryW --> Email
+    App --> Cloudinary
+
+    GHAction --"SSH + git pull + pip + migrate + collectstatic + restart"--> VPS
+
+    classDef edge fill:#e0e7ff,stroke:#3730a3
+    classDef server fill:#fef3c7,stroke:#854d0e
+    classDef data fill:#dcfce7,stroke:#166534
+    class CF edge
+    class Nginx,Gunicorn,App,CeleryW,CeleryB,GHAction server
+    class PG,Redis,Cloudinary data
