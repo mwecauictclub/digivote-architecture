@@ -1,0 +1,46 @@
+flowchart TB
+    subgraph Producers["Task Producers"]
+        direction LR
+        WebViews[Web Views & Forms]
+        AdminActions[Admin / Commissioner Actions]
+        Periodic[Celery Beat<br/>(django_celery_beat)]
+    end
+
+    subgraph RedisQueues["Redis Queues"]
+        direction TB
+        EmailQ[(email_queue)]
+        NotifQ[(notification_queue)]
+    end
+
+    subgraph Workers["Celery Workers"]
+        direction TB
+        EmailW[Email Worker Pool<br/>(lower concurrency)]
+        NotifW[Notification Worker Pool]
+    end
+
+    subgraph SideEffects["Side Effects & Storage"]
+        EmailBackend[Email Backend<br/>(Brevo / SMTP / AWS SES)]
+        MySQL[(MySQL)]
+        RedisCache[(Redis Cache)]
+        Tokens[VoterToken creation]
+    end
+
+    WebViews -->|email| EmailQ
+    WebViews -->|notify| NotifQ
+    AdminActions --> NotifQ
+    Periodic --> NotifQ
+    Periodic -->|close elections| NotifQ
+
+    EmailQ --> EmailW --> EmailBackend
+    NotifQ --> NotifW --> MySQL
+    NotifQ --> NotifW --> RedisCache
+    NotifW --> Tokens
+
+    classDef prod fill:#e0f2fe,stroke:#0369a1
+    classDef q fill:#fef3c7,stroke:#854d0e
+    classDef worker fill:#dcfce7,stroke:#166534
+    classDef effect fill:#f3e8ff,stroke:#6b21a8
+    class WebViews,AdminActions,Periodic prod
+    class EmailQ,NotifQ q
+    class EmailW,NotifW worker
+    class EmailBackend,MySQL,RedisCache,Tokens effect
