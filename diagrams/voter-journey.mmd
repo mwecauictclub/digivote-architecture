@@ -6,12 +6,12 @@ flowchart TD
         CheckCollege[Class leader uploads college data]
         Reg1[Enter registration number]
         Reg2[Provide email, phone, password, state, course]
-        Created["Account created<br/>(is_verified=false)"]
+        Created["Account created\n(is_verified = false)"]
     end
 
     subgraph Verification["2. Verification"]
         Commissioner["Commissioner verifies"]
-        Verified["is_verified = true<br/>Voter ID assigned"]
+        Verified["is_verified = true\nVoter ID assigned"]
     end
 
     subgraph Voting["3. Voting (Secure)"]
@@ -19,7 +19,7 @@ flowchart TD
         Tokens["Per-level VoterTokens issued"]
         Active["Election active"]
         Page["Vote page loads eligible levels"]
-        Cast["Choose candidates<br/>Submit per level"]
+        Cast["Choose candidates\nSubmit per level"]
         Atomic["Atomic token consume + vote insert"]
     end
 
