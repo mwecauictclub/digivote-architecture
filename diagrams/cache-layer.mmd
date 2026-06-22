@@ -1,19 +1,19 @@
 flowchart LR
     subgraph Django["Django Application"]
         direction TB
-        Sessions["Session Engine<br/>(django.contrib.sessions.backends.cache)"]
-        Brute["Login Rate Limiting<br/>& Lockouts"]
-        Pwd["Password Reset State<br/>(OTP + Security Questions)"]
-        Turnout["Election Turnout<br/>(10s cache)"]
-        Results["Election Results<br/>(build_election_results)"]
+        Sessions["Session Engine\n(django.contrib.sessions.backends.cache)"]
+        Brute["Login Rate Limiting\n& Lockouts"]
+        Pwd["Password Reset State\n(OTP + Security Questions)"]
+        Turnout["Election Turnout\n(10s cache)"]
+        Results["Election Results\n(build_election_results)"]
         General["General django.core.cache"]
     end
 
     subgraph Redis["Redis Instance"]
         direction TB
-        DB0["DB Index 0<br/>Celery Broker<br/>+ Result Backend"]
-        DB1["DB Index 1<br/>Django Cache + Sessions<br/>Prefix: digivote"]
-        Keys["Cache Keys<br/>• login_attempts:*<br/>• pwd_reset_*:*<br/>• election_turnout:*<br/>• election_results:*"]
+        DB0["DB Index 0\nCelery Broker\n+ Result Backend"]
+        DB1["DB Index 1\nDjango Cache + Sessions\nPrefix: digivote"]
+        Keys["Cache Keys\n• login_attempts:*\n• pwd_reset_*:*\n• election_turnout:*\n• election_results:*"]
     end
 
     subgraph Celery["Celery"]
