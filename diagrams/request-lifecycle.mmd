@@ -1,0 +1,29 @@
+sequenceDiagram
+    participant Client as Browser/HTMX
+    participant CF as Cloudflare
+    participant N as nginx
+    participant G as Gunicorn
+    participant D as Django
+    participant R as Redis
+    participant DB as MySQL
+
+    Client->>CF: HTTPS Request
+    CF->>N: Forward (X-Forwarded-Proto=https)
+    N->>G: unix socket proxy
+    G->>D: WSGI
+
+    D->>R: Get session + cache checks
+    alt Cache hit for results/turnout/etc
+        R-->>D: Return cached value
+    else Miss
+        D->>DB: ORM queries
+        DB-->>D: Data
+        D->>R: cache.set(...)
+    end
+
+    D-->>G: HttpResponse (full or fragment)
+    G-->>N
+    N-->>CF
+    CF-->>Client
+
+    Note over D,R: Brute-force, password reset state,<br/>election results & turnout are Redis-backed
