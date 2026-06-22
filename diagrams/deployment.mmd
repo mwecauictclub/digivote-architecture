@@ -4,29 +4,29 @@ flowchart TB
     end
 
     subgraph Cloudflare["Cloudflare"]
-        CF[Proxy + TLS +<br/>DDoS Protection]
+        CF["Proxy + TLS +\nDDoS Protection"]
     end
 
     subgraph VPS["VPS (159.65.119.182)"]
         direction TB
-        Nginx["nginx<br/>• :443 (Cloudflare)<br/>• :81 (direct IP)<br/>• Static files"]
-        Gunicorn["Gunicorn<br/>3 workers<br/>unix:/src/gunicorn.sock"]
-        App["Django Application<br/>(/var/www/.../src)"]
-        MySQL[(MySQL<br/>digivote_db)]
+        Nginx["nginx\n• :443 (Cloudflare)\n• :81 (direct IP)\n• Static files"]
+        Gunicorn["Gunicorn\n3 workers\nunix:/src/gunicorn.sock"]
+        App["Django Application\n(/var/www/.../src)"]
+        MySQL["(MySQL\ndigivote_db)"]
         Redis[(Redis)]
         CeleryW[Celery Worker]
         CeleryB[Celery Beat]
     end
 
     subgraph External["External"]
-        Cloudinary[(Cloudinary<br/>Media Storage)]
-        Email[Email Backend<br/>(Brevo / SMTP / AWS SES)]
+        Cloudinary["(Cloudinary\nMedia Storage)"]
+        Email["Email Backend\n(Brevo / SMTP / AWS SES)"]
         GitHub[GitHub]
     end
 
     subgraph CI["CI/CD"]
         direction TB
-        GHAction[GitHub Actions<br/>deploy.yml]
+        GHAction["GitHub Actions\ndeploy.yml"]
     end
 
     Browser --> CF
