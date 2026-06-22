@@ -1,0 +1,34 @@
+flowchart TD
+    Start[Student learns about election] --> Register
+
+    subgraph Registration["1. Registration (Self-service)"]
+        direction TB
+        CheckCollege[Class leader uploads college data]
+        Reg1[Enter registration number]
+        Reg2[Provide email, phone, password, state, course]
+        Created["Account created<br/>(is_verified=false)"]
+    end
+
+    subgraph Verification["2. Verification"]
+        Commissioner["Commissioner verifies"]
+        Verified["is_verified = true<br/>Voter ID assigned"]
+    end
+
+    subgraph Voting["3. Voting (Secure)"]
+        direction TB
+        Tokens["Per-level VoterTokens issued"]
+        Active["Election active"]
+        Page["Vote page loads eligible levels"]
+        Cast["Choose candidates<br/>Submit per level"]
+        Atomic["Atomic token consume + vote insert"]
+    end
+
+    subgraph Results["4. Results"]
+        End["Election ends"]
+        Publish["Commissioner publishes results"]
+        PublicView["Full results + PDF report visible"]
+    end
+
+    Register --> Reg1 --> Reg2 --> Created --> Commissioner --> Verified
+    Verified --> Tokens --> Active --> Page --> Cast --> Atomic
+    Atomic --> End --> Publish --> PublicView
