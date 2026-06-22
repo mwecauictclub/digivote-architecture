@@ -1,0 +1,31 @@
+sequenceDiagram
+    autonumber
+    actor Voter
+    participant UI as Web UI
+    participant Server as Django
+    participant Token as VoterToken
+    participant VoteM as Vote
+
+    Voter->>UI: Open /elections/{id}/vote/
+    UI->>Server: GET request
+    Server-->>UI: List of levels + unused tokens
+
+    loop For each level the voter can vote in
+        Voter->>UI: Select candidate(s) for positions
+        Voter->>UI: Submit votes for this level
+        UI->>Server: POST /vote/submit/
+
+        Server->>Token: Atomic mark_as_used()
+        alt Token already used
+            Token-->>Server: Update affected 0 rows
+            Server-->>UI: "Already voted for this level"
+        else Token claimed successfully
+            Token-->>Server: Success
+            loop per position with a choice
+                Server->>VoteM: Create Vote record
+            end
+            Server-->>UI: "Votes recorded successfully"
+        end
+    end
+
+    Note over Server,VoteM: Votes reference token only.<br/>User identity is not stored in the public result path.
