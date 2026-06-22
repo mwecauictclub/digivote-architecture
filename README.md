@@ -30,7 +30,7 @@ This is a **standalone public documentation repository**. It focuses on **how th
 ```mermaid
 flowchart TB
     subgraph Users["👥 Users"]
-        Voter[Voters &<br/>Candidates]
+        Voter["Voters &\nCandidates"]
         ClassLeaders[Class Leaders]
         Commissioners[Commissioners]
         Observers[Observers]
@@ -38,23 +38,23 @@ flowchart TB
     end
 
     subgraph Edge["🌐 Edge / CDN"]
-        Cloudflare[Cloudflare<br/>Proxy + TLS]
+        Cloudflare["Cloudflare\nProxy + TLS"]
     end
 
     subgraph App["🗳️ DigiVote Application"]
         direction TB
-        Nginx[nginx<br/>Static + Reverse Proxy]
-        Gunicorn[Gunicorn<br/>(or uvicorn)]
-        Django["Django 5.2<br/>+ DRF + HTMX"]
+        Nginx["nginx\nStatic + Reverse Proxy"]
+        Gunicorn["Gunicorn\n(or uvicorn)"]
+        Django["Django 5.2\n+ DRF + HTMX"]
     end
 
     subgraph Services["⚙️ Services"]
         direction TB
         MySQL[(MySQL)]
-        Redis[(Redis<br/>Cache + Broker)]
-        Celery["Celery Workers<br/>+ Beat"]
-        Cloudinary[Cloudinary<br/>(Media)]
-        EmailSvc[Email<br/>(Brevo / SMTP / AWS)]
+        Redis["(Redis\nCache + Broker)"]
+        Celery["Celery Workers\n+ Beat"]
+        Cloudinary["Cloudinary\n(Media)"]
+        EmailSvc["Email\n(Brevo / SMTP / AWS)"]
     end
 
     Public --> Cloudflare
@@ -143,17 +143,17 @@ Redis is central to performance and correctness.
 flowchart LR
     subgraph DjangoApp["Django Application"]
         Sessions[Session Engine]
-        LoginRate[Login Brute-force<br/>Protection]
-        PwdReset[Password Reset<br/>OTP + Questions]
-        Turnout[Live Turnout<br/>Fragment]
-        Results[Election Results<br/>Computation]
+        LoginRate["Login Brute-force\nProtection"]
+        PwdReset["Password Reset\nOTP + Questions"]
+        Turnout["Live Turnout\nFragment"]
+        Results["Election Results\nComputation"]
     end
 
     subgraph Redis["Redis (Shared)"]
         direction TB
-        DB0["DB 0<br/>Celery Broker + Results"]
-        DB1["DB 1<br/>Django Cache + Sessions"]
-        CacheKeys["digivote:* keys<br/>with prefix"]
+        DB0["DB 0\nCelery Broker + Results"]
+        DB1["DB 1\nDjango Cache + Sessions"]
+        CacheKeys["digivote:* keys\nwith prefix"]
     end
 
     Sessions --> DB1
@@ -192,7 +192,7 @@ flowchart TB
     subgraph Producers["Task Producers"]
         Views[Web Views]
         Admin[Admin Actions]
-        Beat[Celery Beat<br/>(scheduled)]
+        Beat["Celery Beat\n(scheduled)"]
     end
 
     subgraph Queues["Redis Queues"]
@@ -201,7 +201,7 @@ flowchart TB
     end
 
     subgraph Workers["Celery Workers"]
-        EmailWorker[Email Worker<br/>(lower concurrency)]
+        EmailWorker["Email Worker\n(lower concurrency)"]
         NotifWorker[Notification Worker]
     end
 
@@ -249,28 +249,28 @@ flowchart TD
     Start[Discover election] --> Register
 
     subgraph Registration
-        ClassUpload[Class leader uploads<br/>college data]
+        ClassUpload["Class leader uploads\ncollege data"]
         Reg1[Submit reg. number]
-        Reg2[Complete profile +<br/>email + password]
-        Created[Account created<br/>(unverified)]
+        Reg2["Complete profile +\nemail + password"]
+        Created["Account created\n(unverified)"]
     end
 
     subgraph Verification
         Verify[Commissioner verifies]
-        Tokens[Tokens generated for<br/>active elections]
+        Tokens["Tokens generated for\nactive elections"]
     end
 
     subgraph Voting
         Active[Active election]
-        Choose[Choose candidates<br/>per level]
-        Submit[Atomic submit<br/>using VoterToken]
-        Recorded[Vote recorded<br/>Token consumed]
+        Choose["Choose candidates\nper level"]
+        Submit["Atomic submit\nusing VoterToken"]
+        Recorded["Vote recorded\nToken consumed"]
     end
 
     subgraph Results
         Close[Election ends]
         Publish[Commissioner publishes]
-        View[Public results +<br/>PDF report]
+        View["Public results +\nPDF report"]
     end
 
     Register --> Reg1 --> Reg2 --> Created --> Verify --> Tokens
@@ -366,16 +366,16 @@ Current production setup (2026):
 ```mermaid
 flowchart TB
     subgraph Internet["Internet / Users"]
-        CF[Cloudflare<br/>A record + Proxy]
+        CF["Cloudflare\nA record + Proxy"]
     end
 
     subgraph VPS["VPS 159.65.119.182"]
         direction TB
         Nginx[nginx :443 + :81]
-        Gunicorn[Gunicorn<br/>3 workers<br/>unix socket]
-        DjangoApp["Django App<br/>(src/)"]
-        MySQL[(MySQL<br/>digivote_db)]
-        Redis[(Redis<br/>local)]
+        Gunicorn["Gunicorn\n3 workers\nunix socket"]
+        DjangoApp["Django App\n(src/)"]
+        MySQL["(MySQL\ndigivote_db)"]
+        Redis["(Redis\nlocal)"]
         CeleryWorker[Celery worker]
         CeleryBeat[Celery beat]
     end
