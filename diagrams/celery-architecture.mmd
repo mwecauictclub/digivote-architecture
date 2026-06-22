@@ -3,7 +3,7 @@ flowchart TB
         direction LR
         WebViews[Web Views & Forms]
         AdminActions[Admin / Commissioner Actions]
-        Periodic[Celery Beat<br/>(django_celery_beat)]
+        Periodic["Celery Beat\n(django_celery_beat)"]
     end
 
     subgraph RedisQueues["Redis Queues"]
@@ -14,12 +14,12 @@ flowchart TB
 
     subgraph Workers["Celery Workers"]
         direction TB
-        EmailW[Email Worker Pool<br/>(lower concurrency)]
+        EmailW["Email Worker Pool\n(lower concurrency)"]
         NotifW[Notification Worker Pool]
     end
 
     subgraph SideEffects["Side Effects & Storage"]
-        EmailBackend[Email Backend<br/>(Brevo / SMTP / AWS SES)]
+        EmailBackend["Email Backend\n(Brevo / SMTP / AWS SES)"]
         MySQL[(MySQL)]
         RedisCache[(Redis Cache)]
         Tokens[VoterToken creation]
